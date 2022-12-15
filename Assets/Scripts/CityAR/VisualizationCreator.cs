@@ -8,6 +8,7 @@ namespace CityAR
         private DataObject _dataObject;
         private GameObject _platform;
         private Data _data;
+        public Material material;
 
         private void Start()
         {
@@ -110,12 +111,23 @@ namespace CityAR
                 return;
             }
             
-            float w = entry.w; // w -> x coordinate
-            float h = entry.h; // h -> z coordinate
+            var w = entry.w - 0.005f; // w -> x coordinate
+            var h = entry.h - 0.005f; // h -> z coordinate
+            var x = entry.x;
+            var z = entry.z;
+            var depth = entry.deepth;
             
-            if (w * h > 0)
+            if (w * h > 0 && !isBase)
             {
-                //TODO create district objects
+                var parent = new GameObject();
+                parent.name = entry.name;
+                var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.GetComponent<MeshRenderer>().material = material;
+                cube.transform.parent = parent.transform;
+                parent.transform.parent = gameObject.transform;
+                cube.transform.localPosition = new Vector3(-0.5f, 0.5f, 0.5f);
+                parent.transform.localScale = new Vector3(w, 0f, h);
+                parent.transform.position = new Vector3(x, 0.03f * depth, z);
             }
         }
 
